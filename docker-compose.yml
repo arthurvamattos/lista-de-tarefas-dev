@@ -4,10 +4,10 @@ services:
     image: mysql:5.7
     container_name: tarefas-mysql
     environment:
-    - MYSQL_ROOT_PASSWORD=Suporte99
+    - MYSQL_ROOT_PASSWORD=root
     - MYSQL_DATABASE=db_tarefas
-    - MYSQL_USER=suporte
-    - MYSQL_PASSWORD=Suporte99
+    - MYSQL_USER=root
+    - MYSQL_PASSWORD=root
     ports:
       - "3307:3306"
     volumes:

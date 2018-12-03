@@ -52,14 +52,14 @@ exports.listarPorDescricaoPaginado = (req, res) => {
   const pagina = req.params.pagina || '1';
   let descricao = req.params.descricao || "";
   // itens por página
-  const itemsPorPagina = req.params.itensPorPagina && parseInt(req.params.itensPorPagina) > 4
+  const itemsPorPagina = (req.params.itensPorPagina && parseInt(req.params.itensPorPagina) > 4
    ? parseInt(req.params.itensPorPagina) 
-   : 5;
+   : 5)+1;
 
   descricao = "%" + descricao + "%";
 
   // Determinando a quantidade de tarefas cadastradas
-  const queryCount = 'select count(*) as contador from tarefas';
+  const queryCount = "select count(*) as contador from tarefas where descricao like ?";
 
   // Definindo o fim e o inicio da paginação
   const fim = (itemsPorPagina * pagina) - 1;
@@ -75,7 +75,7 @@ exports.listarPorDescricaoPaginado = (req, res) => {
       });
     } else if (rows.length > 0) {
       const lista = rows;
-      conexao.query(queryCount, (err, rows) => {
+      conexao.query(queryCount, [descricao],(err, rows) => {
         let divisao = rows[0].contador / itemsPorPagina;
         let incremento = Math.floor(divisao) == divisao ? 0 : 1;
 

@@ -210,21 +210,6 @@ function montarPaginacao(numeroPaginas) {
   lista.appendChild(liAnterior);
 
   for (let i = 1; i <= numeroPaginas; i++) {
-    // let li = document.createElement('li');
-    // li.className = `page-item ${i == paginaAtual ? 'active': ''}`.trim();
-
-    // let a = document.createElement('a');
-    // a.className = 'page-link';
-    // a.innerText = i;
-    // a.href = '#'
-
-    // a.addEventListener('click', e => {
-    //   paginaAtual = i
-    //   montarPainel();
-    // })
-
-    // li.appendChild(a);
-
     let li = montarItemPaginacao(i, i, false);
     lista.appendChild(li);
   }

@@ -54,20 +54,26 @@ paths:
         '404':
           description: "Nenhuma tarefa encontrada para este filtro"
           
-  /tarefas/p/{pagina}/f/{filtro}:
+  /tarefas/p/{pagina}/q/{quantidadePaginas}/f/{filtro}:
     get:
       summary: Lista tarefas a partir de (ou parte de) sua descrição com paginação
       parameters: 
       - name: pagina
         in: path
-        description: "Número da página"
+        description: "Número da página desejada"
+        required: true
+        schema:
+          type: integer
+      - name: quantidadePaginas
+        in: path
+        description: "Quantidade de itens por página (mín: 5)"
         required: true
         schema:
           type: integer
       - name: filtro
         in: path
         description: "Descrição da tarefa"
-        required: true
+        required: false
         schema:
           type: string
       responses:
@@ -76,7 +82,23 @@ paths:
           content:
             application/json:
               schema:
-                type: array
+                type: object
+                items:
+                  $ref: '#/components/schemas/Tarefa'
+        '404':
+          description: "Nenhum item encontrado na busca"
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/Tarefa'
+        '500':
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                type: object
                 items:
                   $ref: '#/components/schemas/Tarefa'
         

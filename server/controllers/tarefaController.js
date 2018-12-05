@@ -5,7 +5,6 @@ exports.listarTodos = (req, res) => {
   const query = 'select * from tarefas order by data asc';
   conexao.query(query, (err, rows) => {
     if (err) {
-      console.log(err);
       res.status(500);
       res.json({
         message: "Internal Server Error"
@@ -30,7 +29,6 @@ exports.listarPorDescricao = (req, res) => {
   const query = 'select * from tarefas where descricao like ? order by data asc';
   conexao.query(query, [descricao], (err, rows) => {
     if (err) {
-      console.log(err);
       res.status(500);
       res.json({
         message: "Internal Server Error"
@@ -66,12 +64,10 @@ exports.listarPorDescricaoPaginado = (req, res) => {
   const fim = itemsPorPagina * pagina;
   const inicio = fim - itemsPorPagina;
 
-  const query = 'select * from tarefas where descricao like ? order by id asc limit ?,?';
+  const query = 'select * from tarefas where descricao like ? order by data asc limit ?,?';
 
-  console.log(inicio)
   conexao.query(query, [descricao, inicio, itemsPorPagina], (err, rows) => {
     if (err) {
-      console.log(err);
       res.status(500);
       res.json({
         message: "Internal Server Error"
@@ -106,9 +102,7 @@ exports.listarPorId = (req, res) => {
   const query = 'select * from tarefas where id = ?';
 
   conexao.query(query, [id], (err, rows) => {
-    if (err) {
-      console.log(err);
-      res.status(500);
+    if (err) {res.status(500);
       res.json({
         message: "Internal Server Error"
       });
@@ -135,7 +129,6 @@ exports.inserir = (req, res) => {
 
   conexao.query(query, [tarefa.descricao, tarefa.data, tarefa.realizado], (err, rows) => {
     if (err) {
-      console.log(err);
       res.status(500);
       res.json({
         message: "Internal Server Erro"
@@ -160,7 +153,6 @@ exports.alterar = (req, res) => {
   const query = 'update tarefas set descricao = ?, data = ?, realizado = ? where id = ?';
   conexao.query(query, [tarefa.descricao, tarefa.data, tarefa.realizado, tarefa.id], (err, rows) => {
     if (err) {
-      console.log(err);
       res.status(500);
       res.json({
         message: "Internal Server Erro"
@@ -186,7 +178,6 @@ exports.deletar = (req, res) => {
   const query = 'delete from tarefas where id = ?';
   conexao.query(query, [id], (err, rows) => {
     if (err) {
-      console.log(err);
       res.status(500);
       res.json({
         message: "Internal Server Erro"

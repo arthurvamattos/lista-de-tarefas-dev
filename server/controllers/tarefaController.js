@@ -49,24 +49,27 @@ exports.listarPorDescricao = (req, res) => {
 
 exports.listarPorDescricaoPaginado = (req, res) => {
 
-  const pagina = req.params.pagina || '1';
+  const pagina = req.params.pagina || 1;
   let descricao = req.params.descricao || "";
   // itens por página
-  const itemsPorPagina = (req.params.itensPorPagina && parseInt(req.params.itensPorPagina) > 4
-   ? parseInt(req.params.itensPorPagina) 
-   : 5)+1;
+  const itemsPorPagina = parseInt(req.params.itensPorPagina) || 5;
 
   descricao = "%" + descricao + "%";
 
   // Determinando a quantidade de tarefas cadastradas
   const queryCount = "select count(*) as contador from tarefas where descricao like ?";
 
-  // Definindo o fim e o inicio da paginação
-  const fim = (itemsPorPagina * pagina) - 1;
-  const inicio = fim - (itemsPorPagina - 1);
+  // // Definindo o fim e o inicio da paginação
+  // const fim = (itemsPorPagina * pagina) - 1;
+  // const inicio = fim - (itemsPorPagina - 1);
 
-  const query = 'select * from tarefas where descricao like ? order by data asc limit ?,?';
-  conexao.query(query, [descricao, inicio, fim], (err, rows) => {
+  const fim = itemsPorPagina * pagina;
+  const inicio = fim - itemsPorPagina;
+
+  const query = 'select * from tarefas where descricao like ? order by id asc limit ?,?';
+
+  console.log(inicio)
+  conexao.query(query, [descricao, inicio, itemsPorPagina], (err, rows) => {
     if (err) {
       console.log(err);
       res.status(500);
@@ -75,7 +78,7 @@ exports.listarPorDescricaoPaginado = (req, res) => {
       });
     } else if (rows.length > 0) {
       const lista = rows;
-      conexao.query(queryCount, [descricao],(err, rows) => {
+      conexao.query(queryCount, [descricao], (err, rows) => {
         let divisao = rows[0].contador / itemsPorPagina;
         let incremento = Math.floor(divisao) == divisao ? 0 : 1;
 

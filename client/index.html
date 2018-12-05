@@ -16,7 +16,7 @@
   <!-- CSS customizado -->
 </head>
 
-<body onload="montarPainel()">
+<body onload="montarPainel(), tarefasVencer()">
 
   <!-- cabeçalho -->
   <header class="bg-primary">
@@ -47,6 +47,15 @@
     <!-- mensagem -->
     <div class="nao-mostrar" id="mensagem">Bem-vindo</div>
     <!-- mensagem -->
+
+    <!-- alerta -->
+    <div class="nao-mostrar" id="mensagemAlerta">
+      Tarefas a vencer
+      <div id="tarefasVencer">
+        
+      </div>
+    </div>
+    <!-- alerta -->
 
     <!-- cartões -->
     <div class="card-columns" id="painelTarefas">

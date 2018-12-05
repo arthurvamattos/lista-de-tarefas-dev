@@ -195,7 +195,42 @@ document.querySelector('#btn-deletar').addEventListener('click', function(event)
     $('#modal').modal('toggle');
 });
 
+// Mostrar tarefas a vencer
+function tarefasVencer(){
 
+    let promise = listarTarefas("");
+    promise
+        // Caso o resultado seja processado
+        .then(function (response) {
+
+            // Caso não sejam encontradas tarefas via API
+            if (response == null) {
+                mostrarMensagem('Nenhuma tarefa encontrada para esta busca!', 'd');
+            } else {
+
+                // Caso sejam encontradas tarefas via API
+                response.forEach(function (item) {
+                    var strData = dataToString(item.data);                    
+                    let now = new Date(); 
+                    let dia = now.getDate();
+                        if(dia < 10){
+                            dia = "0"+dia;
+                        }
+                    let mes = now.getMonth()+1;         
+
+                    dataHoje = dia+"/"+mes+"/"+now.getFullYear();
+                    
+                    if(strData === dataHoje)
+                        // alert(item.descricao + " encerra hoje!");
+                        mostrarAlerta(item.descricao + " encerra hoje!");
+                    });
+                }
+        })
+        // Caso o resultado não seja processado
+        .catch(function (error) {
+            console.log(error);
+        });
+}
 
 
 

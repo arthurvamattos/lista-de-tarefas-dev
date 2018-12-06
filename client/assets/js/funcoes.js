@@ -209,8 +209,10 @@ function tarefasVencer(){
             } else {
 
                 // Caso sejam encontradas tarefas via API
+                let listaTarefas = '';
+                let cont = 0;
                 response.forEach(function (item) {
-                    var strData = dataToString(item.data);                    
+                    let strData = dataToString(item.data);                    
                     let now = new Date(); 
                     let dia = now.getDate();
                         if(dia < 10){
@@ -220,10 +222,21 @@ function tarefasVencer(){
 
                     dataHoje = dia+"/"+mes+"/"+now.getFullYear();
                     
-                    if(strData === dataHoje)
+                    if(strData === dataHoje){
                         // alert(item.descricao + " encerra hoje!");
-                        mostrarAlerta(item.descricao + " encerra hoje!");
+                        if (cont === 0){
+                            listaTarefas = listaTarefas + item.descricao;
+                        } else {
+                            listaTarefas =  listaTarefas + ', ' + item.descricao;
+                        }
+                        cont++;
+                    }
                     });
+                    if (cont === 1){
+                        mostrarAlerta('A tarefa ' + listaTarefas + ' encerra hoje!');
+                    } else if (cont > 1){
+                        mostrarAlerta('As tarefas ' + listaTarefas + ' encerram hoje!');
+                    }
                 }
         })
         // Caso o resultado não seja processado

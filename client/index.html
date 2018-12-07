@@ -48,6 +48,10 @@
     <div class="nao-mostrar" id="mensagem">Bem-vindo</div>
     <!-- mensagem -->
 
+    <!-- alerta de vencimento -->
+    <div class="" id="mensagemAlerta"></div>    
+    <!-- alerta de vencimento -->
+
     <!-- cartões -->
     <div class="card-columns" id="painelTarefas">
       
@@ -99,6 +103,26 @@
   </div>
   <!-- Fim modal -->
 
+  <!-- Modal Alerta -->
+  <div class="modal" tabindex="-1" role="dialog" id="modal-alerta">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Tarefas que vencem hoje!</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <ul class="list-group" id="lista-alerta"></ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="btn-alerta">Entendido</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal Alerta -->
 
   <!-- scripts -->
   <script src="assets/js/api.js"></script>

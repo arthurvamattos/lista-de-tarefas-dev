@@ -195,59 +195,63 @@ document.querySelector('#btn-deletar').addEventListener('click', function(event)
     $('#modal').modal('toggle');
 });
 
-// Mostrar tarefas a vencer
-function tarefasVencer(){
 
+function tarefasVencer() {
+    
     let promise = listarTarefas("");
     promise
-        // Caso o resultado seja processado
         .then(function (response) {
 
-            // Caso não sejam encontradas tarefas via API
             if (response == null) {
                 mostrarMensagem('Nenhuma tarefa encontrada para esta busca!', 'd');
             } else {
+                let lista = document.querySelector('#lista-alerta');
 
-                // Caso sejam encontradas tarefas via API
-                let listaTarefas = '';
-                let cont = 0;
                 response.forEach(function (item) {
                     let strData = dataToString(item.data);                    
+                    
+                    //Gerando data atual
                     let now = new Date(); 
                     let dia = now.getDate();
                         if(dia < 10){
                             dia = "0"+dia;
                         }
                     let mes = now.getMonth()+1;         
+                    let ano = now.getFullYear();
 
-                    dataHoje = dia+"/"+mes+"/"+now.getFullYear();
+                    //Montando data atual no formato de comparação
+                    dataHoje = dia+"/"+mes+"/"+ano;
                     
-                    if(strData === dataHoje){
-                        // alert(item.descricao + " encerra hoje!");
-                        if (cont === 0){
-                            listaTarefas = listaTarefas + item.descricao;
-                        } else {
-                            listaTarefas =  listaTarefas + ', ' + item.descricao;
-                        }
-                        cont++;
-                    }
+                    if(strData === dataHoje){ //Comparando datas
+                        
+                        //Criando itens da lista com as tarefas que vencem hoje
+                        let alerta = document.createElement('li');
+                        alerta.className = 'list-group-item';
+                        alerta.innerHTML = `${item.descricao}`;
+                        $('#modal-alerta').modal('show');
+                        document.querySelector('#btn-alerta').focus();
+                        lista.appendChild(alerta); //Adicionando a lista
+                        
+                        // Clicando no botão de confirmação
+                        document.querySelector('#btn-alerta').addEventListener('click', function(){
+                            $('#modal-alerta').modal('hide'); //Esconde a modal
+                        });
+
+                        //Chamando modal de alteração
+                        alerta.addEventListener('click', function(event){                            
+                            $('#modal-alerta').modal('toggle'); //Fecha a modal de alerta
+                            montarFormularioAlterar(item.id);
+                            tarefa.id = item.id;
                     });
-                    if (cont === 1){
-                        mostrarAlerta('A tarefa ' + listaTarefas + ' encerra hoje!');
-                    } else if (cont > 1){
-                        mostrarAlerta('As tarefas ' + listaTarefas + ' encerram hoje!');
                     }
-                }
+                });
+            }
         })
         // Caso o resultado não seja processado
         .catch(function (error) {
             console.log(error);
         });
 }
-
-
-
-
 
 
 

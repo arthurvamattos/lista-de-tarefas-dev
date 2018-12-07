@@ -18,8 +18,10 @@ function mostrarMensagem(texto, tipo){
 
 
 function mostrarAlerta(texto){
-
-    let mensagem = document.querySelector('#mensagem');
+    let mensagem = document.querySelector('#mensagemAlerta');
     mensagem.innerHTML = texto;
     mensagem.className = 'alert alert-warning mt-2';
+    setTimeout(function(){
+        mensagem.className = 'nao-mostrar';
+    }, 10000);
 }

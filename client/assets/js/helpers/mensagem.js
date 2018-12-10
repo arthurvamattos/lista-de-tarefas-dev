@@ -15,13 +15,3 @@ function mostrarMensagem(texto, tipo){
         mensagem.className = 'nao-mostrar';
     }, 3000);
 }
-
-
-function mostrarAlerta(texto){
-    let mensagem = document.querySelector('#mensagemAlerta');
-    mensagem.innerHTML = texto;
-    mensagem.className = 'alert alert-warning mt-2';
-    setTimeout(function(){
-        mensagem.className = 'nao-mostrar';
-    }, 10000);
-}

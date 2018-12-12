@@ -210,6 +210,7 @@ function montarPaginacao(numeroPaginas) {
   let lista = document.getElementById("lista-paginacao");
   lista.innerHTML = "";
 
+
   
   let liAnterior = montarItemPaginacao(paginaAtual - 1, "Anterior", paginaAtual <= 1)
   let liProximo = montarItemPaginacao(paginaAtual + 1, "Próximo", paginaAtual >= numeroPaginas)
@@ -265,4 +266,61 @@ function confirmarExclusao(){
   }); 
   //fechar o formulario
   $('#modal-excluir').modal('toggle');
+}
+
+function tarefasVencer() {
+    
+    let promise = listarTarefas("");
+    promise
+        .then(function (response) {
+
+            if (response == null) {
+                mostrarMensagem('Nenhuma tarefa encontrada para esta busca!', 'd');
+            } else {
+                let lista = document.querySelector('#lista-alerta');
+
+                response.forEach(function (item) {
+                    let strData = dataToString(item.data);                    
+                    
+                    //Gerando data atual
+                    let now = new Date(); 
+                    let dia = now.getDate();
+                        if(dia < 10){
+                            dia = "0"+dia;
+                        }
+                    let mes = now.getMonth()+1;         
+                    let ano = now.getFullYear();
+
+                    //Montando data atual no formato de comparação
+                    dataHoje = dia+"/"+mes+"/"+ano;
+                    
+                    if(strData === dataHoje){ //Comparando datas
+                        
+                        //Criando itens da lista com as tarefas que vencem hoje
+                        let alerta = document.createElement('li');
+                        alerta.className = 'list-group-item';
+                        alerta.innerHTML = `${item.descricao}`;
+                        $('#modal-alerta').modal('show');
+                        document.querySelector('#btn-alerta').focus();
+                        lista.appendChild(alerta); //Adicionando a lista
+                        
+                        // Clicando no botão de confirmação
+                        document.querySelector('#btn-alerta').addEventListener('click', function(){
+                            $('#modal-alerta').modal('hide'); //Esconde a modal
+                        });
+
+                        //Chamando modal de alteração
+                        alerta.addEventListener('click', function(event){                            
+                            $('#modal-alerta').modal('toggle'); //Fecha a modal de alerta
+                            montarFormularioAlterar(item.id);
+                            tarefa.id = item.id;
+                    });
+                    }
+                });
+            }
+        })
+        // Caso o resultado não seja processado
+        .catch(function (error) {
+            console.log(error);
+        });
 }

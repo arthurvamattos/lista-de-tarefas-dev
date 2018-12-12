@@ -65,3 +65,15 @@
     content: '';
   }
 }
+
+/* Estilizando lista de tarefas a vencer */
+.list-group-item{
+  cursor: pointer;
+  color: #262626;
+}
+.list-group-item:nth-child(even){
+  background-color: #eee;
+}
+.list-group-item:hover{ 
+  background-color: #ddd;
+}

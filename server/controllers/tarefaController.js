@@ -4,13 +4,12 @@ exports.listarTodos = (req, res) => {
 
   const query = 'select * from tarefas order by data asc';
   conexao.query(query, (err, rows) => {
-    if (err){
-      console.log(err);
+    if (err) {
       res.status(500);
       res.json({
         message: "Internal Server Error"
       });
-    } else if (rows.length > 0){
+    } else if (rows.length > 0) {
       res.status(200);
       res.json(rows)
     } else {
@@ -26,16 +25,15 @@ exports.listarPorDescricao = (req, res) => {
 
   let descricao = req.params.descricao || "";
   descricao = "%" + descricao + "%";
-  
+
   const query = 'select * from tarefas where descricao like ? order by data asc';
   conexao.query(query, [descricao], (err, rows) => {
-    if (err){
-      console.log(err);
+    if (err) {
       res.status(500);
       res.json({
         message: "Internal Server Error"
       });
-    } else if (rows.length > 0){
+    } else if (rows.length > 0) {
       res.status(200);
       res.json(rows)
     } else {
@@ -49,41 +47,53 @@ exports.listarPorDescricao = (req, res) => {
 
 exports.listarPorDescricaoPaginado = (req, res) => {
 
-  const pagina = req.params.pagina || '1';
+  const pagina = req.params.pagina || 1;
   let descricao = req.params.descricao || "";
+  // itens por página
+  const itemsPorPagina = parseInt(req.params.itensPorPagina) || 5;
+
   descricao = "%" + descricao + "%";
 
-  // Quantidade de items por página
-  const itemsPorPagina = 5;
-  
   // Determinando a quantidade de tarefas cadastradas
-  const queryCount = 'select count(*) as contador from tarefas';
-  conexao.query(queryCount, (err, rows) => {
-    const qtdPaginas = rows[0].contador / itemsPorPagina;
-  });
+  const queryCount = "select count(*) as contador from tarefas where descricao like ?";
 
-  // Definindo o fim e o inicio da paginação
-  const fim = (itemsPorPagina * pagina) - 1;
-  const inicio = fim - 4;
+  // // Definindo o fim e o inicio da paginação
+  // const fim = (itemsPorPagina * pagina) - 1;
+  // const inicio = fim - (itemsPorPagina - 1);
+
+  const fim = itemsPorPagina * pagina;
+  const inicio = fim - itemsPorPagina;
 
   const query = 'select * from tarefas where descricao like ? order by data asc limit ?,?';
-  conexao.query(query, [descricao, inicio, fim], (err, rows) => {
-    if (err){
-      console.log(err);
+
+  conexao.query(query, [descricao, inicio, itemsPorPagina], (err, rows) => {
+    if (err) {
       res.status(500);
       res.json({
         message: "Internal Server Error"
       });
-    } else if (rows.length > 0){
-      res.status(200);
-      res.json(rows)
+    } else if (rows.length > 0) {
+      const lista = rows;
+      conexao.query(queryCount, [descricao], (err, rows) => {
+        let divisao = rows[0].contador / itemsPorPagina;
+        let incremento = Math.floor(divisao) == divisao ? 0 : 1;
+
+        const qtdPaginas = Math.floor(divisao) + incremento;
+
+        res.status(200);
+        res.json({
+          data: lista,
+          pageCount: qtdPaginas
+        })
+      });
+
     } else {
       res.status(404);
       res.json({
         message: "Nenhuma tarefa encontrada para este filtro"
       });
     }
-  });  
+  });
 }
 
 exports.listarPorId = (req, res) => {
@@ -92,9 +102,7 @@ exports.listarPorId = (req, res) => {
   const query = 'select * from tarefas where id = ?';
 
   conexao.query(query, [id], (err, rows) => {
-    if (err) {
-      console.log(err);
-      res.status(500);
+    if (err) {res.status(500);
       res.json({
         message: "Internal Server Error"
       });
@@ -115,13 +123,12 @@ exports.inserir = (req, res) => {
   const tarefa = {};
   tarefa.descricao = req.body.descricao;
   tarefa.data = req.body.data;
-  tarefa.realizado = false;
+  tarefa.realizado = req.body.realizado;
 
-  const query = 'insert into tarefas (descricao, data) values (?, ?)'
+  const query = 'insert into tarefas (descricao, data, realizado) values (?, ?, ?)';
 
   conexao.query(query, [tarefa.descricao, tarefa.data, tarefa.realizado], (err, rows) => {
     if (err) {
-      console.log(err);
       res.status(500);
       res.json({
         message: "Internal Server Erro"
@@ -145,13 +152,12 @@ exports.alterar = (req, res) => {
 
   const query = 'update tarefas set descricao = ?, data = ?, realizado = ? where id = ?';
   conexao.query(query, [tarefa.descricao, tarefa.data, tarefa.realizado, tarefa.id], (err, rows) => {
-    if (err){
-      console.log(err);
+    if (err) {
       res.status(500);
       res.json({
         message: "Internal Server Erro"
       });
-    } else if (rows.affectedRows > 0){
+    } else if (rows.affectedRows > 0) {
       res.status(202);
       res.json({
         message: "Tarefa atualizada"
@@ -171,13 +177,12 @@ exports.deletar = (req, res) => {
 
   const query = 'delete from tarefas where id = ?';
   conexao.query(query, [id], (err, rows) => {
-    if (err){
-      console.log(err);
+    if (err) {
       res.status(500);
       res.json({
         message: "Internal Server Erro"
       })
-    } else if(rows.affectedRows > 0){
+    } else if (rows.affectedRows > 0) {
       res.status(200);
       res.json({
         message: "Tarefa deletada"

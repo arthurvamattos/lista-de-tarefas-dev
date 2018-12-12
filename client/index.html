@@ -58,6 +58,12 @@
     </div>
     <!-- cartões -->
 
+    <!-- Paginação -->
+    <nav aria-label="Page navigation example">
+      <ul id="lista-paginacao" class="pagination justify-content-center">
+        
+      </ul>
+    </nav>
   </main>
 
 
@@ -123,12 +129,31 @@
     </div>
   </div>
   <!-- Modal Alerta -->
+  
+  <!-- Modal de Exclusão -->
+  <div class="modal" tabindex="-1" role="dialog" id="modal-excluir">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirmar Exclusão</h5>
+          <p>Tem certeza que deseja excluir essa tarefa permanentemente?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="$('#modal').modal('toggle');">Cancelar</button>
+          <button type="button" class="btn btn-outline-danger" onclick="confirmarExclusao()">Excluir</button>
+        </div>
+      </div>
+  </div>
+</div>
+<!-- Fim do Modal de Exclusão -->
 
   <!-- scripts -->
   <script src="assets/js/api.js"></script>
   <script src="assets/js/helpers/mensagem.js"></script>
   <script src="assets/js/helpers/data.js"></script>
   <script src="assets/js/funcoes.js"></script>
+  <script src="assets/js/keyboardevents.js"></script>
+  
   <!-- scripts -->
 
 

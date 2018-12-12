@@ -14,4 +14,7 @@ insert into tarefas (descricao, data) values
   ('Inciar o trabalho de ED', '2018-10-03 12:00:00'),
   ('Abastecer o carro', '2018-10-04 00:00:00'),
   ('Pagar conta de água', '2018-11-12 10:00:00'),
-  ('Entregar trabalho de ED', '2018-11-14 19:00:00');
+  ('Entregar trabalho de ED', '2018-11-14 19:00:00'),
+  ('Entregar trabalho de Meio Ambiente', '2018-11-15 19:00:00'),
+  ('Entregar trabalho de Web', '2018-12-13 19:00:00'),
+  ('Entregar trabalho de Metodologia Científica', '2018-11-28 19:00:00');

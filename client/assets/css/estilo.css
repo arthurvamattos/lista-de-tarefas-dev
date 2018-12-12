@@ -56,6 +56,18 @@
   display: flex;
 }
 
+.card-expirado{
+  background-color: rgb(230, 86, 86);
+}
+.card-realizado{
+  background-color: greenyellow;
+}
+.td-lt{
+  text-decoration: line-through;
+}
+.tc-w{
+  color: white;
+}
 @media (max-width: 576px){
   #btn-buscar::after{
     content: '';
@@ -63,4 +75,16 @@
   #btn-adicionar::after{
     content: '';
   }
+}
+
+/* Estilizando lista de tarefas a vencer */
+.list-group-item{
+  cursor: pointer;
+  color: #262626;
+}
+.list-group-item:nth-child(even){
+  background-color: #eee;
+}
+.list-group-item:hover{ 
+  background-color: #ddd;
 }

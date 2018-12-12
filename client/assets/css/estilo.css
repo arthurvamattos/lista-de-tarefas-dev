@@ -45,6 +45,17 @@
   border-radius: .25rem;
   padding: 0 !important;
 }
+
+.form-check input{
+  width: 40px;
+  align-items: center;
+  display: flex;
+}
+.form-check{
+  align-items: center;
+  display: flex;
+}
+
 .card-expirado{
   background-color: rgb(230, 86, 86);
 }

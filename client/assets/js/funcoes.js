@@ -109,6 +109,10 @@ document.querySelector('#btn-adicionar').addEventListener('click', function (eve
   // Setando o focus no campo descricao-tarefa
   document.querySelector('#descricao-tarefa').focus();
 
+    // Limpando os campos do formulário
+    document.querySelector('#descricao-tarefa').value = '';
+    document.querySelector('#data-tarefa').value = '';
+    document.querySelector('#status-tarefa').checked = false;
   // Limpando os campos do formulário
   document.querySelector('#descricao-tarefa').value = '';
   document.querySelector('#data-tarefa').value = '';
@@ -124,6 +128,30 @@ document.querySelector('#btn-inserir').addEventListener('click', function (event
 // Função para inserir dados via API
 function inserir() {
 
+    // Capturar os dados do formulário
+    let descricao = document.querySelector('#descricao-tarefa').value;
+    let data = document.querySelector('#data-tarefa').value;
+    let realizado = document.querySelector('#status-tarefa').checked; //true or false
+
+    // Criar um objeto tarefa
+    let tarefa = {};
+    tarefa.descricao = descricao;
+    tarefa.data = data;
+    tarefa.realizado = realizado;
+
+    // Inserir uma nova tarefa
+    let promise = inserirTarefa(tarefa);
+    promise
+        .then(function (response) {
+            mostrarMensagem('Tarefa inserida com sucesso', 's');
+            montarPainel();
+        })
+        .catch(function (erro) {
+            mostrarMensagem(erro, 'd');
+        });
+
+    // Mostra o modal
+    $('#modal').modal('toggle');
   // Capturar os dados do formulário
   let descricao = document.querySelector('#descricao-tarefa').value;
   let data = document.querySelector('#data-tarefa').value;
@@ -156,10 +184,11 @@ function montarFormularioAlterar(id) {
   promise
     .then(function (tarefa) {
 
-      // Campos do formulário
-      document.querySelector('#idTarefa').value = tarefa.id;
-      document.querySelector('#descricao-tarefa').value = tarefa.descricao;
-      document.querySelector('#data-tarefa').value = dataToInput(tarefa.data);
+            // Campos do formulário
+            document.querySelector('#idTarefa').value = tarefa.id;
+            document.querySelector('#descricao-tarefa').value = tarefa.descricao;
+            document.querySelector('#data-tarefa').value = dataToInput(tarefa.data);
+            document.querySelector('#status-tarefa').checked = tarefa.realizado;
 
       // Mostra o modal
       $('#modal').modal('show');
@@ -183,6 +212,10 @@ function montarFormularioAlterar(id) {
 // Quando o botão alterar for clicado
 document.querySelector('#btn-alterar').addEventListener('click', function (event) {
 
+    // Dados do formulário
+    tarefa.descricao = document.querySelector('#descricao-tarefa').value;
+    tarefa.data = document.querySelector('#data-tarefa').value;
+    tarefa.realizado = document.querySelector('#status-tarefa').checked;
   event.preventDefault();
 
   // Dados do formulário

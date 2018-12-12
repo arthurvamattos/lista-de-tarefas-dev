@@ -28,7 +28,6 @@ function montarPainel() {
   promise
     // Caso o resultado seja processado
     .then(function (response) {
-debugger
       // Caso não sejam encontradas tarefas via API
       if (response.data == null) {
         mostrarMensagem('Nenhuma tarefa encontrada para esta busca!', 'd');

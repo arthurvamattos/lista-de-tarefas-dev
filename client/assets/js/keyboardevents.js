@@ -1,5 +1,4 @@
 window.addEventListener("keydown", function (event) {
-    console.log(event);
     //Botão Nova Tarefa
     if (event.altKey && event.keyCode == 78) {
         $('#modal').modal('show');

@@ -99,7 +99,7 @@ function inserir() {
     // Capturar os dados do formulário
     let descricao = document.querySelector('#descricao-tarefa').value;
     let data = document.querySelector('#data-tarefa').value;
-    let realizado = document.querySelector('#status-tarefa').checked;
+    let realizado = document.querySelector('#status-tarefa').checked; //true or false
 
     // Criar um objeto tarefa
     let tarefa = {};

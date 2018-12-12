@@ -1,6 +1,6 @@
 window.addEventListener("keydown", function (event) {
     console.log(event);
-    //Nova Tarefa
+    //Botão Nova Tarefa
     if (event.altKey && event.keyCode == 78) {
         $('#modal').modal('show');
         document.querySelector('#btn-inserir').classList.remove('nao-mostrar');
@@ -17,12 +17,12 @@ window.addEventListener("keydown", function (event) {
 
         event.preventDefault();
     }
-    //Inserir
-    if (event.keyCode == 13) {
+    //Botão Atabalho Inserir
+    if (event.altKey && event.keyCode == 83) {
         inserir();
     }
 
-    //Excluir
+    //Botão Atabalho Excluir
     if (event.altKey && event.keyCode == 82) {
         let promise = deletarTarefa(tarefa.id);
         promise
@@ -37,11 +37,10 @@ window.addEventListener("keydown", function (event) {
         $('#modal').modal('toggle');
     }
 
-    //ALTERAR
+    //Botão Atalho Alterar
     if (event.altKey && event.keyCode == 65) {
         event.preventDefault();
 
-        // Dados do formulário
         tarefa.descricao = document.querySelector('#descricao-tarefa').value;
         tarefa.data = document.querySelector('#data-tarefa').value;
       
@@ -63,20 +62,24 @@ window.addEventListener("keydown", function (event) {
     }
 
     //ABRIR FORMULARIO COM DADOS A VENCER
-    for(let i = 112, j=1; i <= 114; i++, j++) {
+    for(let i = 112, j=1; i <= 113; i++, j++) {
         if (event.ctrlKey && event.keyCode == i) {
-            getNext(j)
+            getNext(j) 
         }
+
+    }
+    if (event.ctrlKey && event.keyCode == 114) {
+        getPrev()
     }
 });
 
-//BUSCA PELA DATA MAS RECENTE
+//Botão tarefa preste a vencer 
 function getNext(numero) {
     let dataHoje = new Date();
 
     listarTarefas("").then(data => {
         if (Array.isArray(data)) {
-            dataHoje.setDate(-1)
+            dataHoje.setHours(-1)
 
             const novo = data.filter(d => {
                 if (new Date(d.data) >= dataHoje) {
@@ -106,6 +109,46 @@ function getNext(numero) {
             tarefa.id = novo[novo.length - numero].id;
             document.querySelector('#descricao-tarefa').value = novo[novo.length - numero].descricao;
             document.querySelector('#data-tarefa').value = dataToInput(novo[novo.length - numero].data);
+        }
+
+    }).catch(err => console.log(err))
+}
+//Vencido
+function getPrev() {
+    let dataHoje = new Date();
+
+    listarTarefas("").then(data => {
+        if (Array.isArray(data)) {
+            dataHoje.setHours(-1)
+
+            const novo = data.filter(d => {
+                if (new Date(d.data) < dataHoje) {
+                    return d;
+                }
+            })
+
+            if (novo.length < 1) {
+                mostrarMensagem('Não existe tarefas prestes a vencer', 's');
+                return null;
+            }
+
+            novo.sort((ant, dep) => {
+                return ant >= dep
+            });
+            console.log(novo)
+            $('#modal').modal('show');
+            document.querySelector('#btn-inserir').classList.add('nao-mostrar');
+            document.querySelector('#btn-alterar').classList.remove('nao-mostrar');
+            document.querySelector('#btn-deletar').classList.remove('nao-mostrar');
+            document.querySelector('.modal-title').innerHTML = 'Alterar tarefa';
+
+            // Setando o focus no campo descricao tarefa
+            document.querySelector('#descricao-tarefa').focus();
+
+            //Limpando os campos do formulário
+            tarefa.id = novo[novo.length - 1].id;
+            document.querySelector('#descricao-tarefa').value = novo[novo.length - 1].descricao;
+            document.querySelector('#data-tarefa').value = dataToInput(novo[novo.length - 1].data);
         }
 
     }).catch(err => console.log(err))

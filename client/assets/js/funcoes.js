@@ -41,7 +41,7 @@ function montarPainel() {
           cartao.innerHTML = `
                                 <div class="card-body">
                                 <div>
-                                    <span class="card-subtitle mb-2 text-muted">${dataToString(item.data)}</span>
+                                    <span class="card-subtitle mb-2">${dataToString(item.data)}</span>
                                 </div>
                                 <p class="card-text">${item.descricao}</p>
                                 </div>
@@ -152,29 +152,6 @@ function inserir() {
 
     // Mostra o modal
     $('#modal').modal('toggle');
-  // Capturar os dados do formulário
-  let descricao = document.querySelector('#descricao-tarefa').value;
-  let data = document.querySelector('#data-tarefa').value;
-
-  // Criar um objeto tarefa
-  let tarefa = {};
-  tarefa.descricao = descricao;
-  tarefa.data = data;
-  tarefa.realizado = false;
-
-  // Inserir uma nova tarefa
-  let promise = inserirTarefa(tarefa);
-  promise
-    .then(function (response) {
-      mostrarMensagem('Tarefa inserida com sucesso', 's');
-      montarPainel();
-    })
-    .catch(function (erro) {
-      mostrarMensagem(erro, 'd');
-    });
-
-  // Mostra o modal
-  $('#modal').modal('toggle');
 }
 
 // Função que monta o formulário para alterar

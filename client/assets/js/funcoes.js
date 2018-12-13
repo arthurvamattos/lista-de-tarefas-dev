@@ -289,20 +289,21 @@ function tarefasVencer() {
             } else {
                 let lista = document.querySelector('#lista-alerta');
 
-                response.forEach(function (item) {
-                    let strData = dataToString(item.data);                    
-                    
-                    //Gerando data atual
-                    let now = new Date(); 
-                    let dia = now.getDate();
-                        if(dia < 10){
-                            dia = "0"+dia;
-                        }
-                    let mes = now.getMonth()+1;         
-                    let ano = now.getFullYear();
+                //Gerando data atual
+                let now = new Date(); 
+                let dia = now.getDate();
+                    if(dia < 10){
+                        dia = "0"+dia;
+                    }
+                let mes = now.getMonth()+1;         
+                let ano = now.getFullYear();
 
-                    //Montando data atual no formato de comparação
-                    dataHoje = dia+"/"+mes+"/"+ano;
+                //Montando data atual no formato de comparação
+                dataHoje = dia+"/"+mes+"/"+ano;
+
+                response.forEach(function (item) {
+                    let strData = dataToString(item.data);       
+                    
                     if(strData === dataHoje && item.realizado === 0){ //Comparando datas
                         
                         //Criando itens da lista com as tarefas que vencem hoje

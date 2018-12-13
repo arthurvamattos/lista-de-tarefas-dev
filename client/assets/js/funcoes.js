@@ -303,8 +303,8 @@ function tarefasVencer() {
 
                     //Montando data atual no formato de comparação
                     dataHoje = dia+"/"+mes+"/"+ano;
-                    
-                    if(strData === dataHoje){ //Comparando datas
+                    debugger
+                    if(strData === dataHoje && item.realizado === 0){ //Comparando datas
                         
                         //Criando itens da lista com as tarefas que vencem hoje
                         let alerta = document.createElement('li');

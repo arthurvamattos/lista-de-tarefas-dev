@@ -145,6 +145,7 @@ function inserir() {
         .then(function (response) {
             mostrarMensagem('Tarefa inserida com sucesso', 's');
             montarPainel();
+            mostrarTarefasVencer();
         })
         .catch(function (erro) {
             mostrarMensagem(erro, 'd');
@@ -202,7 +203,7 @@ document.querySelector('#btn-alterar').addEventListener('click', function (event
   let promisse = alterarTarefa(tarefa);
   promisse
     .then(function (resolve) {
-
+      mostrarTarefasVencer();
       montarPainel();
       mostrarMensagem('Tarefa alterada com sucesso!', 's');
     })
@@ -297,7 +298,7 @@ function tarefasVencer() {
                     }
                 let mes = now.getMonth()+1;         
                 let ano = now.getFullYear();
-
+                let quantidadeTarefas = 0;
                 //Montando data atual no formato de comparação
                 dataHoje = dia+"/"+mes+"/"+ano;
 
@@ -324,13 +325,79 @@ function tarefasVencer() {
                             $('#modal-alerta').modal('toggle'); //Fecha a modal de alerta
                             montarFormularioAlterar(item.id);
                             tarefa.id = item.id;
-                    });
+                        });
+                        quantidadeTarefas++;
                     }
                 });
+                let qtd = document.querySelector('#qtd-alerta');
+                qtd.innerHTML = `${quantidadeTarefas}`;
+                if (quantidadeTarefas <= 0){
+                  qtd.className = 'num-alerta num-alerta-transparente'
+                }
             }
         })
         // Caso o resultado não seja processado
         .catch(function (error) {
             console.log(error);
         });
+}
+
+function mostrarTarefasVencer() {
+    
+  let promise = listarTarefas("");
+  promise
+      .then(function (response) {
+
+          if (response == null) {
+              mostrarMensagem('Nenhuma tarefa encontrada para esta busca!', 'd');
+          } else {
+              let lista = document.querySelector('#lista-vencimento');
+
+              //Gerando data atual
+              let now = new Date(); 
+              let dia = now.getDate();
+                  if(dia < 10){
+                      dia = "0"+dia;
+                  }
+              let mes = now.getMonth()+1;         
+              let ano = now.getFullYear();
+
+              let quantidadeTarefas = 0;
+
+              //Montando data atual no formato de comparação
+              dataHoje = dia+"/"+mes+"/"+ano;
+              lista.innerHTML='';
+              response.forEach(function (item) {
+                  let strData = dataToString(item.data);       
+                  
+                  if(strData === dataHoje && item.realizado === 0){ //Comparando datas
+                      
+                      //Criando itens da lista com as tarefas que vencem hoje
+                      let alerta = document.createElement('a');
+                      alerta.className = 'dropdown-item';
+                      alerta.innerHTML = `${item.descricao}`;                      
+                      lista.appendChild(alerta); //Adicionando a lista
+
+                      //Chamando modal de alteração
+                      alerta.addEventListener('click', function(event){                     
+                          montarFormularioAlterar(item.id);
+                          tarefa.id = item.id;
+                  });
+                  quantidadeTarefas++;
+                  }
+              });
+              let qtd = document.querySelector('#qtd-alerta');
+              qtd.innerHTML = `${quantidadeTarefas}`;
+              if (quantidadeTarefas <= 0){
+                qtd.className = 'num-alerta num-alerta-transparente'
+                lista.innerHTML = ` <a class="dropdown-item">Não há tarefas para hoje</a>`;
+              } else {
+                qtd.className = 'num-alerta num-alerta-cor'
+              }
+          }
+      })
+      // Caso o resultado não seja processado
+      .catch(function (error) {
+          console.log(error);
+      });
 }
